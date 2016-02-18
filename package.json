@@ -1,0 +1,30 @@
+{
+  "name": "jawn",
+  "version": "0.0.1",
+  "description": "Tabular Data support for Dat/hypercore",
+  "main": "index.js",
+  "scripts": {
+    "test": "standard && tape test/*.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CfABrigadePhiladelphia/jawn.git"
+  },
+  "keywords": [
+    "data",
+    "version control"
+  ],
+  "author": "Matt Zumwalt",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/CfABrigadePhiladelphia/jawn/issues"
+  },
+  "homepage": "https://github.com/CfABrigadePhiladelphia/jawn",
+  "dependencies": {
+    "hypercore": "^1.6.2"
+  },
+  "devDependencies": {
+    "standard": "^6.0.5",
+    "tape": "^4.4.0"
+  }
+}
