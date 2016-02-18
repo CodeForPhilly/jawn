@@ -1,8 +1,6 @@
 # dat jawn: 'Git for Tabular Data'
 
-Jawn is a node.js module that allows _distributed version control of Tabular Data_. It's connected to the [dat](https://github.com/maxogden/dat) project. 
-
-Jawn allows you to import tabular data (rows and columns like CSV or TSV) and track how those data change over time. It uses [hypercore](https://github.com/mafintosh/hypercore) to put those data into block chains that can be efficiently synced and validated across any number of hosts.  
+Jawn is a node.js module that allows _distributed version control of Tabular Data_. It's connected to the [dat](https://github.com/maxogden/dat) project. It allows you to import tabular data (rows and columns like CSV or TSV) and track how those data change over time. _Do you have non-tabular data? read this:_ [What about Non Tabular Data?](https://github.com/CfABrigadePhiladelphia/jawn/wiki/What-about-Non-Tabular-Data%3F)  
 
 The key features for jawn are to:
   * **manage and track change history** in tabular data
