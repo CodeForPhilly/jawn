@@ -11,6 +11,6 @@ function Jawn (opts) {
   this.db = this.core.db
 }
 
-Jawn.prototype.createImportPipeline = function (opts, callback) {
-  return createImportPipeline(this, opts, callback)
+Jawn.prototype.createImportPipeline = function (opts) {
+  return createImportPipeline(this, opts)
 }

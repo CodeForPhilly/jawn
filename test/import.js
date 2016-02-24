@@ -6,14 +6,18 @@ var memdb = require('memdb')
 
 test('import json to jawn', function (t) {
   var jawn = freshJawn()
-  importFromFile(jawn, 'dummy.json', {'format': 'json'}, verify)
+  var importStream = importFromFile(jawn, 'dummy.json', {'format': 'json'})
   var expected = [
     '{"foo":"bar","name":"josie","age":"35"}',
     '{"foo":"baz","name":"eloise","age":"71"}',
     '{"foo":"baz","name":"francoise","age":"5"}'
   ]
-  function verify (err, feedId) {
+
+  importStream.on('finish', verify)
+
+  function verify (err) {
     if (err) { console.log(err) }
+    var feedId = importStream.writeStream.id
     var rs = jawn.core.createReadStream(feedId)
     rs.on('data', function (block) {
       t.same(block.toString(), expected.shift(), 'block matches imported line')
@@ -25,7 +29,8 @@ test('import json to jawn', function (t) {
 
 test('import csv to jawn', function (t) {
   var jawn = freshJawn()
-  importFromFile(jawn, 'sample.csv', {'format': 'csv'}, verify)
+  importFromFile(jawn, 'sample.csv', {'format': 'csv'})
+  var importStream = importFromFile(jawn, 'sample.csv', {'format': 'csv'}, verify)
   var expected = [
     '{"Type of Experience":"Writing software in any programming language","Little/No Experience":"1","Some Experience":"5","Very Familiar":"4"}',
     '{"Type of Experience":"Frontend Web Development","Little/No Experience":"4","Some Experience":"3","Very Familiar":"3"}',
@@ -33,8 +38,11 @@ test('import csv to jawn', function (t) {
     '{"Type of Experience":"Using Git to track changes and share code (add, commit, push, pull)","Little/No Experience":"2","Some Experience":"5","Very Familiar":"3"}'
   ]
 
-  function verify (err, feedId) {
+  importStream.on('finish', verify)
+
+  function verify (err) {
     if (err) { console.log(err) }
+    var feedId = importStream.writeStream.id
     var rs = jawn.core.createReadStream(feedId)
     rs.on('data', function (block) {
       t.same(block.toString(), expected.shift(), 'block matches imported line')
@@ -54,8 +62,9 @@ function freshJawn () {
   return new Jawn({db: memdb()})
 }
 
-function importFromFile (jawn, file, opts, callback) {
-  var importPipeline = jawn.createImportPipeline(opts, callback)
+function importFromFile (jawn, file, opts) {
+  var importPipeline = jawn.createImportPipeline(opts)
   var data = fs.createReadStream(fixture(file))
   data.pipe(importPipeline)
+  return importPipeline
 }
