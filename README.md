@@ -28,3 +28,10 @@ _work in progress_
 ## Contributing
 
 _work in progress_
+
+If you want to work on the jawn code, first clone the repository and cd into that directory, then install the node dependencies and run the tests with these commands: 
+
+```
+npm install
+npm test
+```
