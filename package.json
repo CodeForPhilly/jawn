@@ -4,7 +4,7 @@
   "description": "Tabular Data support for Dat/hypercore",
   "main": "index.js",
   "scripts": {
-    "test": "standard && tape test/*.js"
+    "test": "tape csvToJsonReader/tests/*.js"
   },
   "repository": {
     "type": "git",
