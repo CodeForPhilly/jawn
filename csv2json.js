@@ -8,7 +8,12 @@ module.exports = function(file) {
         fs.readFile(file, function(err, data) {
             if (err) throw err;
             
-            console.log(data.toString('utf8'));
+            var jsonData = [];
+            
+            var formattedData = data.toString('utf8').split('\r\n');
+            for (var i = 0; i < formattedData.length; i++) {
+                console.log(formattedData[i]);
+            }
         });
     }
 }
