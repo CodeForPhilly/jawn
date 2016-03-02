@@ -1,37 +1,9 @@
 (function() {
-	var csvReader = require('fast-csv');
 	var fs = require('fs');
 
 	module.exports = function(){
 
 		var methods = {};
-
-		methods.readFileAsync = function(filename) {
-			var stream = fs.createReadStream(filename);
-
-			var lineNumber = 0;
-			var headers = {};
-			var csvString = '';
-			csvReader.fromStream(stream)
-			.transform(function(data) {
-			  	if(lineNumber === 0) {
-			  		headers = data;
-			  		lineNumber++;
-			  		return;
-			  	}
-
-			    lineNumber++;
-			  	csvString = csvString + methods.csvJsonLine(data, headers);
-			  	//console.log(csvString);
-			  	return csvString;
-			  })
-			  .on('data', function(data) {
-			  	//console.log(data);
-			  })
-			  .on('end', function() {
-			  	console.log('done');
-			  });
-		};
 
 		methods.csvJsonLine = function(csvLine, headers) {
 			var obj = {};
@@ -49,15 +21,16 @@
 			var lines = buffer.toString().split('\n');
 
 			var headers = lines[0].split(',').map(function(d) {
-				return d.replace(/[\r]/g, '');
+				return d.replace(/[\r]/g, '').trim();
 			});
+
 			var numberOfLines = lines.length;
 			var objArray = [];
 
 			for(var j = 1; j < numberOfLines; j++) {
 				var line = lines[j].split(',').map(function(d) {
-					return d.replace(/[\r]/g, '');
-				})
+					return d.replace(/[\r]/g, '').trim();
+				});
 				var jsonObj = methods.csvJsonLine(line, headers);
 				objArray.push(jsonObj);
 			}
