@@ -1,3 +1,3 @@
 var csv2json = require('../csv2json');
 
-csv2json('test/sample.csv');
+console.log(csv2json('test/sample.csv'));

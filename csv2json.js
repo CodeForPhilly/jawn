@@ -5,15 +5,26 @@ module.exports = function(file) {
     if (path.extname(file) != '.csv') {
         console.log("Invalid file. Files with extension .csv only.")
     } else {
-        fs.readFile(file, function(err, data) {
-            if (err) throw err;
+        var data = fs.readFileSync(file);
+        return convertToJson(data);
+    }
+    
+    function convertToJson(data) {
+        var jsonData = [];
             
-            var jsonData = [];
-            
-            var formattedData = data.toString('utf8').split('\r\n');
-            for (var i = 0; i < formattedData.length; i++) {
-                console.log(formattedData[i]);
+        var formattedData = data.toString('utf8').split('\r\n');
+        var keys = formattedData[0].split('\t');
+        
+        for (var i = 1; i < formattedData.length; i++) {
+            var row = formattedData[i].split('\t');
+            var obj = {};
+            for (var j = 0; j < row.length; j++) {
+                obj[keys[j]] = row[j];
             }
-        });
+            
+            jsonData.push(obj);
+        }
+        
+        return JSON.stringify(jsonData);
     }
 }
