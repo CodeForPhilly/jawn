@@ -1,9 +1,42 @@
-(function() {
-	var fs = require('fs');
+(function () {
+  var fs = require('fs')
+  var csvReader = require('fast-csv')
 
 	module.exports = function(){
 
 		var methods = {};
+
+		methods.readFileAsync = function(filename) {
+            var stream = fs.createReadStream(filename);
+
+            var lineNumber = 0;
+            var headers = {};
+            var csvString = '';
+            csvReader.fromStream(stream)
+            .transform(function(data) {
+                  if(lineNumber === 0) {
+                      headers = data.map(function(d) {
+                      	return d.trim();
+                      });
+                      lineNumber++;
+                      return;
+                  }
+
+                lineNumber++;
+
+                var line = data.map(function(d) {
+                	return d.trim();
+                })
+                csvString = csvString + ' ' + methods.csvJsonLine(line, headers);
+                console.log(csvString);
+              })
+              .on('data', function(data) {
+                  //console.log(data);
+              })
+              .on('end', function() {
+                  console.log('done');
+              });
+        };
 
 		methods.csvJsonLine = function(csvLine, headers) {
 			var obj = {};
