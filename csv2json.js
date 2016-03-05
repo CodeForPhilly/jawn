@@ -10,9 +10,9 @@ module.exports = function (file) {
   function convertToJson (data) {
     var jsonData = []
     var formattedData = data.toString('utf8').split('\r\n')
-    var keys = formattedData[0].split('\t')
+    var keys = formattedData[0].split(',')
     for (var i = 1; i < formattedData.length; i++) {
-      var row = formattedData[i].split('\t')
+      var row = formattedData[i].split(',')
       var obj = {}
       for (var j = 0; j < row.length; j++) {
         obj[keys[j]] = row[j]
