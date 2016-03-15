@@ -21,7 +21,11 @@
   },
   "homepage": "https://github.com/CfABrigadePhiladelphia/jawn",
   "dependencies": {
-    "hypercore": "^1.6.2"
+    "hypercore": "~1.8.0",
+    "fs": "0.0.2",
+    "path": "~0.12.7",
+    "tape": "~4.5.1",
+    "level": "~1.4.0"
   },
   "devDependencies": {
     "standard": "^6.0.5",
