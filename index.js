@@ -1,22 +1,16 @@
 var level = require('level')
 var hypercore = require('hypercore')
+var createImportStream = require('./lib/import.js')
 
 module.exports = Jawn
-function Jawn () {
-  var self = this
-  self.db = level('data.jawn')
-  self.core = hypercore(self.db)
+
+function Jawn (opts) {
+  if (!opts) opts = {}
+  var db = opts.db || level('data.jawn')
+  this.core = opts.core || hypercore(db)
+  this.db = this.core.db
 }
 
-Jawn.prototype.import = function (stream) {
-  var ws = this.core.createWriteStream()
-  stream.on('data', function (line) {
-    ws.write(line)
-  })
-  stream.on('end', function () {
-    ws.end(function () {
-      console.log(ws.id.toString('hex'))
-    })
-  })
-  return ws
+Jawn.prototype.createImportStream = function (opts) {
+  return createImportStream(this, opts)
 }
