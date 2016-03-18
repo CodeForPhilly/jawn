@@ -24,9 +24,9 @@
     "fs": "0.0.2",
     "hypercore": "~1.8.0",
     "level": "~1.4.0",
+    "mississippi": "^1.2.0",
     "parse-input-stream": "^1.0.1",
     "path": "~0.12.7",
-    "pump": "^1.0.1",
     "tape": "~4.5.1",
     "through2": "^2.0.1"
   },
