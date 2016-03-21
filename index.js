@@ -1,6 +1,6 @@
 var level = require('level')
 var hypercore = require('hypercore')
-var createImportStream = require('./lib/import.js')
+var createImportPipeline = require('./lib/import.js')
 
 module.exports = Jawn
 
@@ -11,6 +11,6 @@ function Jawn (opts) {
   this.db = this.core.db
 }
 
-Jawn.prototype.createImportStream = function (opts) {
-  return createImportStream(this, opts)
+Jawn.prototype.createImportPipeline = function (opts, callback) {
+  return createImportPipeline(this, opts, callback)
 }
