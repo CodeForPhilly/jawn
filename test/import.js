@@ -30,7 +30,7 @@ test('import json to jawn', function (t) {
 test('import csv to jawn', function (t) {
   var jawn = freshJawn()
   importFromFile(jawn, 'sample.csv', {'format': 'csv'})
-  var importStream = importFromFile(jawn, 'sample.csv', {'format': 'csv'}, verify)
+  var importStream = importFromFile(jawn, 'sample.csv', {'format': 'csv'})
   var expected = [
     '{"Type of Experience":"Writing software in any programming language","Little/No Experience":"1","Some Experience":"5","Very Familiar":"4"}',
     '{"Type of Experience":"Frontend Web Development","Little/No Experience":"4","Some Experience":"3","Very Familiar":"3"}',
