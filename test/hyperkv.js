@@ -5,7 +5,6 @@ var hyperkv = require('hyperkv')
 var hyperlog = require('hyperlog')
 var sub = require('subleveldown')
 var through = require('through2')
-var miss = require('mississippi')
 var memdb = require('memdb')
 
 test('import rows to hyperkv', function (t) {
@@ -15,7 +14,8 @@ test('import rows to hyperkv', function (t) {
     db: sub(db, 'kv')
   })
 
-  var importStream = importFromFile(kv, 'dummy.json')
+  var hs = kv.createHistoryStream()
+  importFromFile(kv, 'dummy.json')
 
   var expected = [
     '{"foo":"bar","name":"josie","age":"35"}',
@@ -23,15 +23,15 @@ test('import rows to hyperkv', function (t) {
     '{"foo":"baz","name":"francoise","age":"5"}'
   ]
 
-  importStream.on('finish', verify)
+  hs.on('data', verifyBlock)
+  hs.on('end', countBlocks)
 
-  function verify (err) {
+  function verifyBlock (block) {
+    t.same(block.toString(), expected.shift(), 'blocks matched imported line')
+  }
+
+  function countBlocks (err) {
     if (err) { console.log(err) }
-    var hs = kv.createHistoryStream('test')
-    hs.on('data', function (block) {
-      t.same(block.toString(), expected.shift(), 'blocks matched imported line')
-    })
-
     t.end()
   }
 })
@@ -44,7 +44,7 @@ function importFromFile (kv, file) {
   var data = fs.createReadStream(fixture(file))
   var tr = through(putData, end)
 
-  var importStream = miss.pipeline(data, tr)
+  data.pipe(tr)
 
   function putData (row, _, next) {
     kv.put('test', row.toString())
@@ -54,6 +54,4 @@ function importFromFile (kv, file) {
   function end (done) {
     done()
   }
-
-  return importStream
 }

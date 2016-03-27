@@ -1,8 +1,5 @@
-var hyperkv = require('hyperkv')
-var hyperlog = require('hyperlog')
-var sub = require('subleveldown')
 var level = require('level')
-
+var hypercore = require('hypercore')
 var createImportPipeline = require('./lib/import.js')
 
 module.exports = Jawn
@@ -10,11 +7,7 @@ module.exports = Jawn
 function Jawn (opts) {
   if (!opts) opts = {}
   var db = opts.db || level('data.jawn')
-  var kv = hyperkv({
-    log: hyperlog(sub(db, 'log'), {valueEncoding: 'json'}),
-    db: sub(db, 'kv')
-  })
-  this.core = opts.core || kv
+  this.core = opts.core || hypercore(db)
   this.db = this.core.db
 }
 
