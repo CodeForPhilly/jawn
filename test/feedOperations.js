@@ -3,32 +3,17 @@ var Jawn = require('../')
 var memdb = require('memdb')
 var feedOps = require('../lib/feedOperations.js')
 
-test('appendable feed', function (t) {
+test('Create appendable feed and copy data from reference feed', function (t) {
   var jawn = freshJawn()
   var feed = jawn.core.add()
 
-  feed.pappend = function (data) {
-    return new Promise(function (resolve, reject) {
-      feed.append(data, resolve)
-    })
-  }
-
-  feed.pfinalize = function () {
-    return new Promise(function (resolve, reject) {
-      feed.finalize(resolve)
-    })
-  }
-
-  feed.pappend('hello').then(function () {
-    console.log('Appended')
-    return feed
-  })
-  .then(function (feed) {
-    return feed.pfinalize()
-  })
+  storeDataInFeed(feed, ['hello'])
   .then(function () {
+    // Verify feed was finalized and has an id
     console.log('Finalized with id ' + feed.id.toString('hex'))
+    // Create appendable feed
     var appfeed = feedOps.appendTo(jawn.core, feed.id)
+    // Copy data from reference feed, finalize it, then verify the feed has the same number of blocks as the reference
     appfeed.initialize().then(function () {
       return appfeed.finalize_p()
     })
@@ -39,7 +24,7 @@ test('appendable feed', function (t) {
   })
 })
 
-test('append to feed', function (t) {
+test('Create appendable feeed, copy data from reference feed and append to feed', function (t) {
   var jawn = freshJawn()
   var feed = jawn.core.add()
   var expected = ['hello', 'there', 'goodbye']
@@ -50,6 +35,7 @@ test('append to feed', function (t) {
 
     var appfeed = feedOps.appendTo(jawn.core, feed.id)
 
+    // Copy data from original feed with initialize(), then append an additional block and finalize
     appfeed.initialize().then(function () {
       return appfeed.append_p('goodbye')
     })
@@ -57,7 +43,9 @@ test('append to feed', function (t) {
       return appfeed.finalize_p()
     })
     .then(function () {
+      // Verify the feed has the correct number of blocks, and the blocks match what was expected
       t.same(appfeed.blocks, expected.length, 'Correct number of blocks')
+
       for (var i = 0; i < appfeed.blocks; i++) {
         appfeed.get(i, function (err, block) {
           if (err) {
