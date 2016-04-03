@@ -1,7 +1,7 @@
 var level = require('level')
 var hypercore = require('hypercore')
 var createImportPipeline = require('./lib/import.js')
-var feedOperations = require('./lib/feedOperations.js')
+var FeedOperations = require('./lib/feedOperations.js')
 
 module.exports = Jawn
 
@@ -17,6 +17,6 @@ Jawn.prototype.createImportPipeline = function (opts) {
 }
 
 Jawn.prototype.createAppendableFeed = function (feedId, data) {
-  var feed = feedOperations.appendTo(this.core, feedId)
+  var feed = new FeedOperations(this.core).appendableFeed(feedId)
   return feed
 }
