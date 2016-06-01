@@ -6,7 +6,7 @@ var hyperlog = require('hyperlog')
 var sub = require('subleveldown')
 
 var createImportPipeline = require('./lib/import.js')
-var importRowKv = require('./lib/importkv.js')
+var importRowsKv = require('./lib/importkv.js')
 var addRow = require('./lib/add.js')
 var deleteRow = require('./lib/delete.js')
 
@@ -24,8 +24,8 @@ Jawn.prototype.createImportPipeline = function (opts) {
   return createImportPipeline(this, opts)
 }
 
-Jawn.prototype.importRowKv = function (file) {
-  return importRowKv(this, file)
+Jawn.prototype.importRowsKv = function (file, keys) {
+  return importRowsKv(this, file, keys)
 }
 
 Jawn.prototype.addRow = function (key, value) {
