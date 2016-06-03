@@ -25,9 +25,9 @@ test('import file to hyperkv', function (t) {
   })
 })
 
-test('add 3 rows to hyperkv', function (t) {
-  var jawn = freshJawn()
+var jawn = freshJawn()
 
+test('add 3 rows to hyperkv', function (t) {
   var testValues = [
     '{"foo":"bar","name":"leslie","age":"46"}',
     '{"foo":"baz","name":"jim","age":"25"}',
@@ -50,6 +50,21 @@ test('add 3 rows to hyperkv', function (t) {
     if (expected.length === 0) {
       t.end()
     }
+  })
+})
+
+test('delete a row', function (t) {
+  jawn.deleteRow(3)
+
+  jawn.kv.on('delete', function (key, value, node) {
+    jawn.kv.get(3, function (err, values) {
+      if (err) {
+        console.log(err)
+      } else {
+        t.same(values, {}, 'Row 3 has been successfully deleted')
+      }
+      t.end()
+    })
   })
 })
 
