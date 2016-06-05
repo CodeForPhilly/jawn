@@ -57,10 +57,17 @@ function initializeHyperkv (opts) {
     kv = opts.core
   } else {
     var db = opts.db || level('data.jawn')
-    kv = hyperkv({
-      log: hyperlog(sub(db, 'log'), { valueEncoding: 'json' }),
-      db: sub(db, 'kv')
-    })
+    if (!opts.db) {
+      kv = hyperkv({
+        log: hyperlog(sub(db, 'log'), { valueEncoding: 'json' }),
+        db: sub(db, 'kv')
+      })
+    } else {
+      kv = hyperkv({
+        log: hyperlog(db, { valueEncoding: 'json' }),
+        db: db
+      })
+    }
   }
   return kv
 }
